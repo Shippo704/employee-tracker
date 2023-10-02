@@ -1,0 +1,16 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Command line application that interacts with a MySQL database containing employee information",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^9.2.11",
+    "mysql2": "^3.6.1"
+  }
+}
