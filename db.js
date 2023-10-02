@@ -12,23 +12,89 @@ const db = mysql.createConnection({
 });
 
 // database functions
-async function getDepartments() {
-
+// GET functions
+function getDepartments() {
+    const query = "SELECT * FROM department";
+    db.query(query, (error, results) => {
+        if (error) console.log(error);
+        console.table(results);
+    })
 };
 
-async function getRoles() {
-
+function getRoles() {
+    const query = "SELECT * FROM role";
+    db.query(query, (error, results) => {
+        if (error) console.log(error);
+        console.table(results);
+    })
 };
 
-async function getEmployees() {
-
+function getEmployees() {
+    const query = "SELECT * FROM employee";
+    db.query(query, (error, results) => {
+        if (error) console.log(error);
+        console.table(results);
+    })
 };
 
-async function addDepartment() {
-
+// ADD functions
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: input,
+            name: "name",
+            message: "Enter the new department name: "
+        }
+    ])
+    .then((newDepartment) => {
+        const query = `INSERT INTO department (name) VALUES ("${newDepartment.name}")`;
+        db.query(query, (error, results) => {
+            if (error) console.log(error);
+            console.log("New department added seccuessfully.")
+        })
+    })
 };
 
-async function addRole() {
+function addRole() {
+    const query = "SELECT * FROM department";
+    db.query(query, (error, results) => {
+        if (error) console.log(error);
+    })
+    inquirer.prompt([
+        {
+            type: input,
+            name: "title",
+            message: "Enter the title of the new role: "
+        },
+        {
+            type: input,
+            name: "salary",
+            message: "Enter the salary of the new role: $"
+        },
+        {
+            type: listenerCount,
+            name: "department",
+            message: "Select a department for the new role:",
+            choices: results.map(
+                (department) => department.name
+            )
+        }
+    ])
+    .then((newRole) => {
+        const department = results.find((department) => {
+            department.name === newRole.department
+        });
+        const query = "INSERT INTO role SET ?";
+        db.query(query, {
+            title: newRole.title,
+            salary: newRole.salary,
+            department_id: department
+        }, 
+        (error, results) => {
+            if (error) console.log(error);
+            console.log(`Added new role ${results.title} with salary $${results.salary} to the ${results.department} department.`)
+        })
+    })
 
 };
 
@@ -54,5 +120,5 @@ module.exports = {
     addRole,
     addEmployee,
     updateEmployeeRole,
-    End
+    end
 };
