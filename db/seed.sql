@@ -1,17 +1,75 @@
 INSERT INTO department(id, name)
 VALUES
-
-
-
+    (1, "Grocery"),
+    (2, "HABA"),
+    (3, "GM"),
+    (4, "Dairy"),
+    (5, "Frozen"),
+    (6, "Front End"),
+    (7, "Pharmacy"),
+    (8, "Meat"),
+    (9, "Bakery"),
+    (10, "CAO"),
+    (11, "Produce"),
+    (12, "Deli"),
+    (13, "Seafood"),
+    (14, "HMR");
 
 
 INSERT INTO role (id, title, salary, department_id)
 VALUES
-
-
+    (1, "Grocery Manager", 40000.00, 1),
+    (2, "Grocery Employee", 20000.00, 1),
+    (3, "HABA Manager", 35000.00, 2),
+    (4, "HABA Employee", 18000.00, 2),
+    (5, "GM Manager", 36000.00, 3),
+    (6, "GM Employee", 19500.00, 3),
+    (7, "Dairy Employee", 20000.00, 4),
+    (8, "Frozen Employee", 20000.00, 5),
+    (9, "Front End Manager", 37000.00, 6),
+    (10, "Cashier", 19000.00, 6),
+    (11, "Customer Service", 21000.00, 6),
+    (12, "Pharmacy Technician", 30000.00, 7),
+    (13, "Meat Manager", 41000.00, 8),
+    (14, "Meat Employee", 18500.00, 8),
+    (15, "Bakery Manager", 37000.00, 9),
+    (16, "Bakery Employee", 19000.00, 9),
+    (17, "CAO Manager", 42000.00, 10),
+    (18, "CAO Specialist", 24000.00, 10),
+    (19, "Produce Manager", 39000.00, 11),
+    (20, "Produce Employee", 19000.00, 11),
+    (21, "Deli Section Manager", 44000.00, 12),
+    (22, "Deli Employee", 17000.00, 12),
+    (23, "Seafood Employee", 17500.00, 13),
+    (24, "HMR Employee", 17000.00, 14);
 
 
 
 INSERT INTO employee(id, first_name, last_name, role_id, manager_id)
 VALUES
-
+    (1, "Alex", "Anderson", 1, NULL),
+    (2, "Brad", "Bennett", 2, 1),
+    (3, "Chelsea", "Carson", 3, NULL),
+    (4, "David", "Davidson", 4, 3),
+    (5, "Emily", "Emmerson", 5, NULL),
+    (6, "Faith", "Frank", 6, 5),
+    (7, "Geraldine", "Grath", 7, 1),
+    (8, "Hank", "Hafer", 8, 1),
+    (9, "Isabella", "Irving", 9, NULL),
+    (10, "Jess", "Jackson", 10, 9),
+    (11, "Kerry", "Kardashian", 11, 9),
+    (12, "Lara", "Liu", 12, NULL),
+    (13, "Michael", "McDonald", 13, NULL),
+    (14, "Nelson", "Nielson", 14, 13),
+    (15, "Otillie", "Ortega", 15, NULL),
+    (16, "Peter", "Parker", 16, 15),
+    (17, "Qasar", "Quenel", 17, NULL),
+    (18, "Rich", "Rich", 18, 17),
+    (19, "Sarah", "Summers", 19, NULL),
+    (20, "Tyler", "Turnbull", 20, 19),
+    (21, "Ursula", "Ulrich", 21, NULL),
+    (22, "Vanessa", "Vilner", 22, 21),
+    (23, "Wayne", "Wyman", 23, 21),
+    (24, "Xander", "Xultas", 24, 21),
+    (25, "Yasmine", "Yona", 7, 1),
+    (26, "Zeyna", "Zoulous", 10, 9);
