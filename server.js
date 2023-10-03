@@ -107,7 +107,7 @@ function addDepartment() {
     // collect new department info
     inquirer.prompt([
         {
-            type: input,
+            type: "input",
             name: "name",
             message: "Enter the new department name: "
         }
@@ -117,11 +117,11 @@ function addDepartment() {
         const query = `INSERT INTO department (name) VALUES ("${newDepartment.name}")`;
         db.query(query, (error, results) => {
             if (error) return console.log(error);
-            console.log("New department added seccuessfully.")
+            console.log("New department added successfully.");
+            // restart the app
+            appStart();
         })
     })
-    // restart the app
-    appStart();
 };
 
 function addRole() {
@@ -132,17 +132,17 @@ function addRole() {
         // get the info for the new role
         inquirer.prompt([
             {
-                type: input,
+                type: "input",
                 name: "title",
                 message: "Enter the title of the new role: "
             },
             {
-                type: input,
+                type: "input",
                 name: "salary",
                 message: "Enter the salary of the new role: $"
             },
             {
-                type: listenerCount,
+                type: "list",
                 name: "department",
                 message: "Select a department for the new role:",
                 choices: results.map(
@@ -160,31 +160,31 @@ function addRole() {
                 db.query(query, {
                     title: newRole.title,
                     salary: newRole.salary,
-                    department_id: department.id
+                    department_id: department
                 },
                     (error, results) => {
                         if (error) console.log(error);
-                        console.log(`Added new role ${results.title} with salary $${results.salary} to the ${results.department} department.`)
+                        console.log("New role added successfully.");
+                        // restart the app
+                        appStart();
                     })
             })
     })
-    // restart the app
-    appStart();
 };
 
 function addEmployee() {
     // get roles from database
-    db.query("SELECT id, title from roles", (error, results) =>{
+    db.query("SELECT id, title from role", (error, results) => {
         if (error) return console.log(error);
-        const roles = results.map(({id, title}) => ({
+        const roles = results.map(({ id, title }) => ({
             name: title,
             value: id
         }));
-        
+
         // get employee list for managers
         db.query("SELECT id, CONCAT(first_name, ' ', last_name) as name FROM employee", (error, results) => {
             if (error) return console.log(error);
-            const managers = results.map(({id, name}) => ({
+            const managers = results.map(({ id, name }) => ({
                 name: name,
                 value: id
             }));
@@ -192,56 +192,54 @@ function addEmployee() {
             // new employee information
             inquirer.prompt([
                 {
-                    type: input,
+                    type: "input",
                     name: "first_name",
                     message: "Enter the new employee's first name: "
                 },
                 {
-                    type: input,
+                    type: "input",
                     name: "last_name",
-                    messsge: "Enter the new employee's last name: "
+                    message: "Enter the new employee's last name: "
                 },
                 {
-                    type: list,
+                    type: "list",
                     name: "role_id",
                     message: "Select the new employee's role:",
                     choices: [
-                        {name: "None", value: null},
                         ...roles
                     ]
                 },
                 {
-                    type: list,
+                    type: "list",
                     name: "manager_id",
                     message: "Select the new employee's manager:",
                     choices: [
-                        {name: "None", value: null},
                         ...managers
                     ]
                 }
             ])
-            .then((newEmployee) => {
-                const query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
-                const values = [
-                    newEmployee.first_name,
-                    newEmployee.last_name,
-                    newEmployee.role_id,
-                    newEmployee.manager_id
-                ];
-                db.query(query, values, (error) => {
-                    if (error) return console.log(error);
-                    console.log("New employee added successfully.");
+                .then((newEmployee) => {
+                    const query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
+                    const values = [
+                        newEmployee.first_name,
+                        newEmployee.last_name,
+                        newEmployee.role_id,
+                        newEmployee.manager_id
+                    ];
+                    db.query(query, values, (error) => {
+                        if (error) return console.log(error);
+                        console.log("New employee added successfully.");
+                        // restart the app
+                        appStart();
+                    })
                 })
-            })
         })
     });
-  // restart the app
-  appStart();  
 };
 
 function updateEmployeeRole() {
     // get all employee roles
-    const queryEmployees = "SELECT employee.id, employee.first_name, employee.last_name, roles.title FROM employee LEFT JOIN roles ON employee.role_id = role.id";
+    const queryEmployees = "SELECT employee.id, employee.first_name, employee.last_name, role.title FROM employee LEFT JOIN role ON employee.role_id = role.id";
     //  get all roles
     const queryRoles = "SELECT * from role";
     db.query(queryEmployees, (error, resultsEmployees) => {
@@ -251,13 +249,13 @@ function updateEmployeeRole() {
             // get necessary data for the update
             inquirer.prompt([
                 {
-                    type: list,
+                    type: "list",
                     name: "employee",
                     message: "Select the employee to update:",
                     choices: resultsEmployees.map((employee) => `${employee.first_name} ${employee.last_name}`)
                 },
                 {
-                    type: list,
+                    type: "list",
                     name: "role",
                     message: "Select the employee's new role:",
                     choices: resultsRoles.map((role) => `${role.title}`)
@@ -271,15 +269,15 @@ function updateEmployeeRole() {
 
                 // update the employee's role
                 const query = "UPDATE employee SET role_id = ? WHERE id = ?";
-                db.query(query, [employee.id, role.id], (error, results) => {
+                db.query(query, [role.id, employee.id], (error, results) => {
                     if (error) return console.log(error);
-                    console.log(`Updated ${employee.first_name} ${employee.last_name} to the role ${role.title}.`);
+                    console.log("Employee's role has been updated.");
+                    // restart the app
+                    appStart();
                 })
             })
         })
     })
-    // restart the app
-    appStart();
 };
 
 // END the app
