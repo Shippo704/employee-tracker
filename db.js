@@ -168,6 +168,43 @@ function addEmployee() {
 };
 
 function updateEmployeeRole() {
+    // get all employee roles
+    const queryEmployees = "SELECT employee.id, employee.first_name, employee.last_name, roles.title FROM employee LEFT JOIN roles ON employee.role_id = role.id";
+    //  get all roles
+    const queryRoles = "SELECT * from role";
+    db.query(queryEmployees, (error, resultsEmployees) => {
+        if (error) return console.log(error);
+        db.query(queryRoles, (error, resultsRoles) => {
+            if (error) return console.log(error);
+            inquirer.prompt([
+                {
+                    type: list,
+                    name: "employee",
+                    message: "Select the employee to update:",
+                    choices: resultsEmployees.map((employee) => `${employee.first_name} ${employee.last_name}`)
+                },
+                {
+                    type: list,
+                    name: "role",
+                    message: "Select the employee's new role:",
+                    choices: resultsRoles.map((role) => `${role.title}`)
+                }
+            ])
+            .then((results) => {
+                // find the employee
+                const employee = resultsEmployees.find((employee) => `${employee.first_name} ${employee.last_name}` === results.employee);
+                // find the role
+                const role = resultsRoles.find((role) => `${role.title}` === results.role);
+
+                // update the employee's role
+                const query = "UPDATE employee SET role_id = ? WHERE id = ?";
+                db.query(query, [employee.id, role.id], (error, results) => {
+                    if (error) return console.log(error);
+                    console.log(`Updated ${employee.first_name} ${employee.last_name} to the role ${role.title}.`);
+                })
+            })
+        })
+    })
 
 };
 
